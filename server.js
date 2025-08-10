@@ -21,5 +21,10 @@ app.use("/api/v1/session", sessionRoute);
 //Db connection
 mongoose.connect(process.env.MONGO_URI);
 
+app.get('/', (req, res) => {
+  res.send('Backend server is running');
+});
+
+
 //Starting Server
 app.listen(process.env.PORT || 8080, () => console.log("Server running"));
