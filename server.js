@@ -18,6 +18,11 @@ app.use(express.json());
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/session", sessionRoute);
 
+const corsOptions = {
+  origin: process.env.FRONTEND_URL,
+  optionsSuccessStatus: 200,
+};
+
 //Db connection
 mongoose.connect(process.env.MONGO_URI);
 
