@@ -1,31 +1,25 @@
-import express from "express";
-import path from "path";
-import { fileURLToPath } from "url";
-import cors from "cors";
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const dotenv = require("dotenv");
+require("dotenv").config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const authRoute = require("./routes/authRoute.js");
+const sessionRoute = require("./routes/sessionRoute.js");
 
+//Creating Server
 const app = express();
 
+//Middlewares
 app.use(cors());
 app.use(express.json());
 
-// API routes
-import sessionRoutes from "./routes/session.js";
-import authRoutes from "./routes/auth.js";
+//route  Api..
+app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/session", sessionRoute);
 
-app.use("/api/v1/session", sessionRoutes);
-app.use("/api/v1/auth", authRoutes);
+//Db connection
+mongoose.connect(process.env.MONGO_URI);
 
-// React build serve karo
-app.use(express.static(path.join(__dirname, "dist")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
-
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+//Starting Server
+app.listen(process.env.PORT || 8080, () => console.log("Server running"));
